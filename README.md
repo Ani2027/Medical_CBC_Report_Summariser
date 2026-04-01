@@ -92,5 +92,5 @@ This tool is **not a diagnostic device**. It is intended for **educational and p
 
 ## 👨‍💻 Developed By
 
-Built by **Aniket**(Backend) and **Harshit**(Frontend)  
+Built by **Aniket** and **Harshit**  
 Inspired by real-world healthcare needs and diagnostic workflows
