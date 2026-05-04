@@ -1,5 +1,5 @@
 
-# AI-Powered Medical Report Summarizer & Disease Predictor
+# AI-Powered CBC Report Summarizer & Disease Predictor
 
 An intelligent diagnostic system that interprets CBC test results and user symptoms to identify possible conditions, explain abnormal test parameters, recommend diets, and suggest follow-up tests — in plain, understandable language.
 
