@@ -13,7 +13,7 @@ db.sqlite3
 db.sqlite3-journal
 
 # Project Specific (Uploads & Debug logs)
-media/
+media/reports
 debug_text_output.txt
 debug_output.txt
 tempCodeRunnerFile.py
