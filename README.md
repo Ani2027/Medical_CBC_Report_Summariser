@@ -14,6 +14,20 @@ An intelligent diagnostic system that interprets Complete Blood Count (CBC) test
 
 ---
 
+## 📸 Screenshots
+
+Here is a glimpse of the application in action:
+
+| Home | Symptoms | Results 1 |
+|:---:|:---:|:---:|
+| ![Home](media/Demo/home.png) | ![Symptoms](media/Demo/symptoms.png) | ![Results 1](media/Demo/Results1.png) |
+
+| Results 2 | About | Contact |
+|:---:|:---:|:---:|
+| ![Results 2](media/Demo/Results2.png) | ![About](media/Demo/About.png) | ![Contact](media/Demo/Contact.png) |
+
+---
+
 ## 🛠️ Technology Stack
 
 - **Backend / Web Framework**: Django, Python
