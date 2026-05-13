@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+
+# Project Specific (Uploads & Debug logs)
+media/
+debug_text_output.txt
+debug_output.txt
+tempCodeRunnerFile.py
+scripts/tempCodeRunnerFile.py
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store

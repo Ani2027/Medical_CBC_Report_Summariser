@@ -1,0 +1,252 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+{% block title %}Upload Blood Report – Blood Report AI{% endblock %}
+
+{% block content %}
+<style>
+    .hero-section {
+        padding: 3.5rem 0 2rem 0;
+    }
+
+    .hero-text h1 {
+        font-weight: 700;
+        font-size: 2.4rem;
+        line-height: 1.3;
+        color: #1a1a2e;
+        margin-bottom: 1rem;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+        color: #555;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: #e8f0ff;
+        color: #0062E6;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 0.3rem 0.9rem;
+        border-radius: 50px;
+        margin-bottom: 1.2rem;
+    }
+
+    .upload-card {
+        background: #ffffff;
+        border-radius: 22px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        padding: 2.5rem;
+        margin-top: 2rem;
+    }
+
+    .upload-card h2 {
+        font-weight: 700;
+        font-size: 1.4rem;
+        color: #1a1a2e;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .drag-upload {
+        border: 2px dashed #33AEFF;
+        border-radius: 18px;
+        padding: 3rem 2rem;
+        text-align: center;
+        background-color: #f8fbff;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        position: relative;
+    }
+
+    .drag-upload:hover,
+    .drag-upload.dragover {
+        border-color: #0062E6;
+        background-color: #eff5ff;
+        box-shadow: 0 0 0 4px rgba(0, 98, 230, 0.08);
+    }
+
+    .drag-upload-icon {
+        font-size: 3rem;
+        color: #33AEFF;
+        margin-bottom: 0.75rem;
+    }
+
+    .drag-upload h5 {
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: #1a1a2e;
+        margin-bottom: 0.4rem;
+    }
+
+    .drag-upload p {
+        font-size: 0.88rem;
+        color: #777;
+        max-width: 480px;
+        margin: 0 auto;
+        line-height: 1.7;
+    }
+
+    #file-name {
+        margin-top: 1rem;
+        font-size: 0.92rem;
+        font-weight: 500;
+        color: #333;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .upload-btn {
+        background: linear-gradient(to right, #0062E6, #33AEFF);
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 2.5rem;
+        border-radius: 50px;
+        border: none;
+        font-size: 1rem;
+        margin-top: 1.5rem;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .upload-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(0, 98, 230, 0.3);
+        color: white;
+    }
+
+    .upload-btn:disabled {
+        opacity: 0.5;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .feature-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.2rem;
+    }
+
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: #f0f4ff;
+        color: #0062E6;
+        font-size: 0.8rem;
+        font-weight: 500;
+        padding: 0.3rem 0.8rem;
+        border-radius: 50px;
+    }
+</style>
+
+<!-- HERO SECTION -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-4">
+
+            <!-- Image -->
+            <div class="col-md-5 text-center">
+                <img src="{% static 'medical.gif' %}" alt="Medical AI Illustration"
+                     style="max-width: 420px; width: 100%; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.1);">
+            </div>
+
+            <!-- Text -->
+            <div class="col-md-7 hero-text">
+                <div class="hero-badge">
+                    <i class="bi bi-stars"></i> AI-Powered Analysis
+                </div>
+                <h1>Understand your<br>blood report instantly.</h1>
+                <p>
+                    Upload your CBC report PDF and get personalized AI-generated insights —
+                    CBC interpretation, disease likelihood, diet advice, and recommended follow-up tests.
+                </p>
+                <div class="feature-chips">
+                    <span class="chip"><i class="bi bi-check-circle-fill"></i> CBC Interpretation</span>
+                    <span class="chip"><i class="bi bi-check-circle-fill"></i> Disease Prediction</span>
+                    <span class="chip"><i class="bi bi-check-circle-fill"></i> Diet Advice</span>
+                    <span class="chip"><i class="bi bi-check-circle-fill"></i> Follow-up Tests</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- UPLOAD SECTION -->
+<div class="container mb-5">
+    <div class="upload-card">
+        <h2><i class="bi bi-upload me-2" style="color:#0062E6;"></i>Upload Your Blood Report</h2>
+
+        <form method="post" enctype="multipart/form-data" id="uploadForm">
+            {% csrf_token %}
+
+            <label for="file-upload" class="drag-upload d-block" id="upload-box">
+                <div class="drag-upload-icon">
+                    <i class="bi bi-cloud-arrow-up-fill"></i>
+                </div>
+                <h5>Click or drag your PDF here</h5>
+                <p>We accept standard CBC report PDFs. Your file is processed securely and never stored permanently.</p>
+
+                <!-- File name preview -->
+                <div id="file-name" style="display: none;">
+                    <i class="bi bi-file-earmark-pdf-fill text-danger" style="font-size: 1.4rem;"></i>
+                    <span id="selected-file-name"></span>
+                </div>
+
+                <!-- Hidden input -->
+                <input id="file-upload" type="file" name="pdf_file" accept=".pdf" style="display: none;" required>
+            </label>
+
+            <div class="text-center">
+                <button type="submit" id="submit-btn" class="upload-btn" disabled>
+                    <i class="bi bi-send-fill me-2"></i>Analyze Report
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+  const fileInput = document.getElementById("file-upload");
+  const fileNameDisplay = document.getElementById("file-name");
+  const fileNameText = document.getElementById("selected-file-name");
+  const submitBtn = document.getElementById("submit-btn");
+  const uploadBox = document.getElementById("upload-box");
+
+  fileInput.addEventListener("change", function () {
+    if (fileInput.files.length > 0) {
+      fileNameText.textContent = fileInput.files[0].name;
+      fileNameDisplay.style.display = "flex";
+      submitBtn.disabled = false;
+    } else {
+      fileNameDisplay.style.display = "none";
+      submitBtn.disabled = true;
+    }
+  });
+
+  // Drag and drop
+  uploadBox.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    uploadBox.classList.add("dragover");
+  });
+  uploadBox.addEventListener("dragleave", () => uploadBox.classList.remove("dragover"));
+  uploadBox.addEventListener("drop", (e) => {
+    e.preventDefault();
+    uploadBox.classList.remove("dragover");
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type === "application/pdf") {
+      fileInput.files = files;
+      fileNameText.textContent = files[0].name;
+      fileNameDisplay.style.display = "flex";
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+{% endblock %}

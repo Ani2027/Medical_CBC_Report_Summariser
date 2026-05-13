@@ -1,0 +1,81 @@
+{% extends "predictor/base.html" %}
+{% block title %}Error – Blood Report AI{% endblock %}
+
+{% block content %}
+<style>
+    .error-section {
+        text-align: center;
+        padding: 4rem 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .error-icon {
+        font-size: 4rem;
+        color: #dc3545;
+        margin-bottom: 1rem;
+    }
+
+    .error-section h2 {
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: #1a1a2e;
+        margin-bottom: 0.75rem;
+    }
+
+    .error-section p {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+    }
+
+    .error-detail {
+        background: #fff5f5;
+        border: 1px solid #f5c6cb;
+        border-radius: 12px;
+        padding: 1rem 1.4rem;
+        font-size: 0.88rem;
+        color: #721c24;
+        text-align: left;
+        margin-bottom: 2rem;
+        font-family: monospace;
+        word-break: break-word;
+    }
+
+    .btn-back {
+        background: linear-gradient(to right, #0062E6, #33AEFF);
+        color: white;
+        font-weight: 600;
+        padding: 0.7rem 2rem;
+        border-radius: 50px;
+        border: none;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: opacity 0.2s ease;
+        display: inline-block;
+    }
+
+    .btn-back:hover {
+        opacity: 0.88;
+        color: white;
+        box-shadow: 0 5px 16px rgba(0,98,230,0.28);
+    }
+</style>
+
+<div class="error-section">
+    <div class="error-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+    <h2>Something went wrong</h2>
+    <p>We couldn't process your report. This could be due to an unsupported PDF format, missing CBC values, or a parsing error.</p>
+
+    {% if error %}
+    <div class="error-detail">
+        <strong>Details:</strong> {{ error }}
+    </div>
+    {% endif %}
+
+    <a href="{% url 'upload_pdf' %}" class="btn-back">
+        <i class="bi bi-arrow-repeat me-2"></i>Try Again
+    </a>
+</div>
+{% endblock %}

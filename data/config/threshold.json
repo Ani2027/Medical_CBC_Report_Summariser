@@ -1,37 +1,50 @@
 {
   "HGB": {
+    "aliases": ["Haemoglobin", "Hemoglobin", "HGB", "Hb"],
     "Very Low": 0,
     "Low": 8,
     "Normal": 11,
     "High": 15.5
   },
   "RBC": {
+    "aliases": ["Red Blood Cell Count", "RBC Count", "RBC", "R.B.C.", "Total RBC"],
     "Low": 0,
     "Normal": 4.2,
     "High": 5.8
   },
   "MCV": {
+    "aliases": [
+      "Mean Corpuscular Volume", "MCV (Mean Corpuscular Volume)",
+      "Mean Corpuscular Volume (MCV)", "MCV"
+    ],
     "Low": 0,
     "Normal": 80,
     "High": 100
   },
   "WBC": {
+    "aliases": [
+      "Total Leucocyte Count", "Total Leukocyte Count", "White Blood Cells",
+      "WBC", "TLC", "W.B.C.", "Total WBC"
+    ],
     "Very Low": 0,
     "Low": 3000,
     "Normal": 4000,
     "High": 11000
   },
   "NEUT": {
+    "aliases": ["Neutrophils", "Neutrophil %", "NEUT %", "NEU%", "NEUT"],
     "Low": 0,
     "Normal": 40,
     "High": 70
   },
   "LYM": {
+    "aliases": ["Lymphocytes", "Lymphocyte %", "LYMPH %", "LYMP", "LYM%"],
     "Low": 0,
     "Normal": 20,
     "High": 45
   },
   "PLT": {
+    "aliases": ["Platelet Count", "Platelet", "PLT", "Thrombocyte Count"],
     "Very Low": 0,
     "Low": 75,
     "Normal": 150,

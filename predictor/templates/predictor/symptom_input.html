@@ -1,0 +1,125 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}Select Symptoms{% endblock %}
+
+{% block content %}
+<style>
+    .symptom-section {
+        max-width: 860px;
+        margin: 2rem auto;
+        background-color: #ffffff;
+        padding: 2.5rem 3rem;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .symptom-section h2 {
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        font-size: 1.9rem;
+        color: #1a1a2e;
+    }
+
+    .symptom-subtitle {
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+    }
+
+    .symptom-box {
+        background-color: #f8fbfc;
+        padding: 0.85rem 1.1rem;
+        border-radius: 12px;
+        border: 1.5px solid #d6e9f0;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .symptom-box:hover {
+        background-color: #e8f4ff;
+        border-color: #33AEFF;
+        box-shadow: 0 3px 10px rgba(0, 98, 230, 0.1);
+    }
+
+    .symptom-box input[type="checkbox"]:checked + label {
+        font-weight: 600;
+        color: #0062E6;
+    }
+
+    .form-check-input {
+        width: 1.2em;
+        height: 1.2em;
+        margin-top: 0;
+        cursor: pointer;
+        flex-shrink: 0;
+        accent-color: #0062E6;
+    }
+
+    .form-check-label {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .symptom-icon {
+        color: #33AEFF;
+        font-size: 1.1rem;
+    }
+
+    .submit-btn {
+        background: linear-gradient(to right, #0062E6, #33AEFF);
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 3rem;
+        border-radius: 50px;
+        border: none;
+        font-size: 1rem;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        letter-spacing: 0.3px;
+    }
+
+    .submit-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(0, 98, 230, 0.3);
+    }
+</style>
+
+<div class="symptom-section">
+    <h2><i class="bi bi-clipboard2-pulse symptom-icon me-2"></i>Select Your Symptoms</h2>
+    <p class="symptom-subtitle">Check any symptoms you are currently experiencing so we can refine the prediction.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            {% for symptom in symptoms %}
+            <div class="col-md-6">
+                <label class="symptom-box w-100">
+                    <input class="form-check-input" type="checkbox" name="{{ symptom }}" id="{{ symptom }}">
+                    <span class="form-check-label">
+                        <i class="bi bi-heart-pulse symptom-icon"></i>
+                        {{ symptom|underscore_to_space }}
+                    </span>
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="submit-btn">
+                <i class="bi bi-cpu-fill me-2"></i>Analyze Report
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

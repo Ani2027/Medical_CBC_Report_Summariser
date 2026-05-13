@@ -7,11 +7,13 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report
 
 # -------- CONFIG --------
-DATA_PATH = "Version 4/data/processed/cbc_dataset_final.csv"
-MODEL_PATH = "Version 4/models/lightgbm_disease_model.pkl"
-TARGET_ENCODER_PATH = "Version 4/models/label_encoder.pkl"
-FEATURE_ENCODERS_PATH = "Version 4/models/feature_encoders.pkl"
-os.makedirs("models", exist_ok=True)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # project root
+
+DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "cbc_dataset_final.csv")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "lightgbm_disease_model.pkl")
+TARGET_ENCODER_PATH = os.path.join(BASE_DIR, "models", "label_encoder.pkl")
+FEATURE_ENCODERS_PATH = os.path.join(BASE_DIR, "models", "feature_encoders.pkl")
+os.makedirs(os.path.join(BASE_DIR, "models"), exist_ok=True)
 # ------------------------
 
 # ✅ Load data

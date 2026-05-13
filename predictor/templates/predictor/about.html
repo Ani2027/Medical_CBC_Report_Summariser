@@ -1,0 +1,135 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+{% block title %}About – Blood Report AI{% endblock %}
+
+{% block content %}
+<style>
+    .page-section {
+        padding: 4rem 1rem 3rem;
+        text-align: center;
+    }
+
+    .page-section h1 {
+        font-weight: 700;
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+        color: #1a1a2e;
+    }
+
+    .page-section .lead-text {
+        font-size: 1.05rem;
+        max-width: 720px;
+        margin: 0 auto 2.5rem;
+        line-height: 1.9;
+        color: #555;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.2rem;
+        max-width: 860px;
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    .feature-item {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 1.4rem 1.6rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .feature-item-icon {
+        font-size: 1.6rem;
+        color: #0062E6;
+        flex-shrink: 0;
+        margin-top: 0.1rem;
+    }
+
+    .feature-item h6 {
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 0.25rem;
+        font-size: 0.95rem;
+    }
+
+    .feature-item p {
+        font-size: 0.87rem;
+        color: #666;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .team-section {
+        margin-top: 3rem;
+        padding: 2rem;
+        background: #fff;
+        border-radius: 18px;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    .team-section h5 {
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 0.5rem;
+    }
+
+    .team-section p {
+        color: #666;
+        font-size: 0.92rem;
+        margin: 0;
+    }
+</style>
+
+<div class="page-section">
+    <h1><i class="bi bi-heart-pulse-fill me-2" style="color:#0062E6;"></i>About This Project</h1>
+    <p class="lead-text">
+        This platform empowers users to upload their CBC blood reports and instantly receive AI-generated health insights.
+        Our system extracts relevant markers from standard PDF reports, interprets them using clinical rules and a trained
+        machine learning model, and presents results in plain, understandable language.
+    </p>
+
+    <div class="feature-grid">
+        <div class="feature-item">
+            <i class="bi bi-file-earmark-pdf-fill feature-item-icon"></i>
+            <div>
+                <h6>PDF Extraction</h6>
+                <p>Automatically parses CBC values from standard lab report PDFs using PyMuPDF.</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <i class="bi bi-clipboard2-pulse-fill feature-item-icon"></i>
+            <div>
+                <h6>Rule-Based Interpretation</h6>
+                <p>Each CBC parameter is explained using established clinical reference ranges.</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <i class="bi bi-cpu-fill feature-item-icon"></i>
+            <div>
+                <h6>ML Disease Prediction</h6>
+                <p>A LightGBM classifier predicts the top 3 most likely conditions with confidence scores.</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <i class="bi bi-egg-fried feature-item-icon" style="color:#28a745;"></i>
+            <div>
+                <h6>Personalized Advice</h6>
+                <p>Diet recommendations and follow-up tests tailored to each predicted condition.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="team-section mt-4">
+        <h5><i class="bi bi-people-fill me-2" style="color:#0062E6;"></i>Developed By</h5>
+        <p>Built by <strong>Aniket</strong> and <strong>Harshit</strong> — inspired by real-world healthcare needs and diagnostic workflows.</p>
+    </div>
+</div>
+{% endblock %}

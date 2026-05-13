@@ -34,13 +34,34 @@ else:
 # ✅ Encode input
 def encode_input(input_dict):
     encoded = {}
+    
+    # Drop raw numeric values, only keep *_status and symptoms
+    skip_keys = {"HGB", "RBC", "MCV", "WBC", "NEUT", "LYM", "PLT"}
+
     for key, value in input_dict.items():
+        if key in skip_keys:
+            continue
+
         if key in feature_encoders:
             le = feature_encoders[key]
+
+            # Handle unseen labels
+            if value == "Unknown":
+                print(f"⚠️ {key} is Unknown — defaulting to 'Normal'")
+                value = "Normal"
+
             encoded[key] = le.transform([value])[0]
+
         else:
-            encoded[key] = int(value)
+            try:
+                encoded[key] = int(value) if value is not None else 0
+            except (ValueError, TypeError):
+                encoded[key] = 0  # Safe fallback
+
     return pd.DataFrame([encoded])
+
+
+
 
 # ✅ Predict function with normalized rule matching
 def predict_diseases(input_dict, top_n=3, closeness_threshold=0.1):

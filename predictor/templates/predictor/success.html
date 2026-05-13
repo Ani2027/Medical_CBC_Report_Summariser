@@ -1,0 +1,280 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}Prediction Results – Blood Report AI{% endblock %}
+
+{% block content %}
+<style>
+    .result-section {
+        padding: 2rem 0 3rem 0;
+    }
+
+    .result-section h2 {
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 0.4rem;
+        color: #1a1a2e;
+        text-align: center;
+    }
+
+    .result-subtitle {
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+    }
+
+    .summary-card {
+        max-width: 860px;
+        margin: 1.5rem auto;
+        background: #ffffff;
+        border-radius: 18px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+        padding: 1.8rem 2.2rem;
+    }
+
+    .summary-card h4 {
+        color: #0062E6;
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin-bottom: 1.2rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 2px solid #e8f0ff;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* CBC Status Table */
+    .cbc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .cbc-item {
+        background: #f8faff;
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #e2ebff;
+    }
+
+    .cbc-label {
+        font-weight: 600;
+        font-size: 0.88rem;
+        color: #444;
+    }
+
+    .status-badge {
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        letter-spacing: 0.3px;
+    }
+
+    .status-normal   { background: #d4edda; color: #155724; }
+    .status-low      { background: #f8d7da; color: #721c24; }
+    .status-verylow  { background: #f5c6cb; color: #4a0010; border: 1px solid #f1aeb5; }
+    .status-high     { background: #fff3cd; color: #856404; }
+    .status-unknown  { background: #e2e3e5; color: #495057; }
+
+    /* Interpretation list */
+    .interp-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .interp-list li {
+        padding: 0.55rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 0.93rem;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .interp-list li:last-child { border-bottom: none; }
+
+    /* Condition cards */
+    .condition-card {
+        background: #f8faff;
+        border-radius: 14px;
+        padding: 1.2rem 1.4rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #0062E6;
+    }
+
+    .condition-card:last-child { margin-bottom: 0; }
+
+    .condition-card.warning-card {
+        border-left-color: #fd7e14;
+        background: #fff8f0;
+    }
+
+    .condition-title {
+        font-weight: 700;
+        font-size: 1rem;
+        color: #1a1a2e;
+        margin-bottom: 0.5rem;
+    }
+
+    .condition-prob {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #0062E6;
+        background: #e8f0ff;
+        padding: 0.15rem 0.6rem;
+        border-radius: 50px;
+        margin-left: 0.5rem;
+    }
+
+    .condition-detail {
+        font-size: 0.9rem;
+        color: #555;
+        margin-top: 0.4rem;
+        line-height: 1.6;
+    }
+
+    .condition-detail strong {
+        color: #333;
+    }
+
+    .test-tag {
+        display: inline-block;
+        background: #e8f0ff;
+        color: #0062E6;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 0.15rem 0.6rem;
+        border-radius: 50px;
+        margin: 0.2rem 0.2rem 0 0;
+    }
+
+    .btn-retry {
+        background: linear-gradient(to right, #0062E6, #33AEFF);
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 2.5rem;
+        border-radius: 50px;
+        border: none;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        display: inline-block;
+    }
+
+    .btn-retry:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        color: white;
+        box-shadow: 0 6px 20px rgba(0, 98, 230, 0.3);
+    }
+
+    .disclaimer {
+        max-width: 860px;
+        margin: 1rem auto 0;
+        text-align: center;
+        font-size: 0.82rem;
+        color: #888;
+    }
+</style>
+
+<div class="result-section">
+    <h2><i class="bi bi-graph-up-arrow me-2" style="color:#0062E6;"></i>Your AI Health Insights</h2>
+    <p class="result-subtitle">Based on your CBC report and symptoms — for educational use only.</p>
+
+    <!-- CBC Status Grid -->
+    <div class="summary-card">
+        <h4><i class="bi bi-clipboard2-data-fill"></i> CBC Health Status</h4>
+        <div class="cbc-grid">
+            {% for key, value in input_dict.items %}
+                {% if "status" in key %}
+                <div class="cbc-item">
+                    <span class="cbc-label">{{ key|cut:"_status"|upper }}</span>
+                    <span class="status-badge
+                        {% if value == 'Normal' %}status-normal
+                        {% elif value == 'Very Low' %}status-verylow
+                        {% elif value == 'Low' %}status-low
+                        {% elif value == 'High' %}status-high
+                        {% else %}status-unknown{% endif %}">
+                        {{ value }}
+                    </span>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- CBC Interpretation -->
+    <div class="summary-card">
+        <h4><i class="bi bi-search"></i> CBC Interpretation</h4>
+        <div class="interp-table">
+            {% for item in cbc_explanations %}
+            <div class="interp-row">
+                <div class="interp-param">{{ item.param }}</div>
+                <div>
+                    <span class="status-badge
+                        {% if item.status == 'Normal' %}status-normal
+                        {% elif item.status == 'Very Low' %}status-verylow
+                        {% elif item.status == 'Low' %}status-low
+                        {% elif item.status == 'High' %}status-high
+                        {% else %}status-unknown{% endif %}">
+                        {{ item.status }}
+                    </span>
+                </div>
+                <div class="interp-msg">{{ item.message }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Predictions -->
+    <div class="summary-card">
+        <h4><i class="bi bi-lightbulb-fill"></i> Most Likely Conditions</h4>
+        {% for r in results %}
+        <div class="condition-card {% if '⚠️' in r.condition %}warning-card{% endif %}">
+            <div class="condition-title">
+                {{ r.condition }}
+                {% if r.probability %}
+                <span class="condition-prob">{{ r.probability }}</span>
+                {% endif %}
+            </div>
+            {% if r.advice %}
+            <div class="condition-detail">
+                <strong><i class="bi bi-bandaid-fill me-1" style="color:#0062E6;"></i>Advice:</strong> {{ r.advice }}
+            </div>
+            {% endif %}
+            {% if r.diet %}
+            <div class="condition-detail">
+                <strong><i class="bi bi-egg-fried me-1" style="color:#28a745;"></i>Diet:</strong> {{ r.diet }}
+            </div>
+            {% endif %}
+            {% if r.follow_up_tests %}
+            <div class="condition-detail mt-2">
+                <strong><i class="bi bi-flask me-1" style="color:#6f42c1;"></i>Follow-up Tests:</strong><br>
+                {% for test in r.follow_up_tests %}
+                    <span class="test-tag">{{ test }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Retry -->
+    <div class="text-center mt-4">
+        <a href="{% url 'upload_pdf' %}" class="btn-retry">
+            <i class="bi bi-arrow-repeat me-2"></i>Upload Another Report
+        </a>
+    </div>
+
+    <p class="disclaimer">
+        <i class="bi bi-shield-exclamation me-1"></i>
+        This tool is for educational and preliminary support only. Always consult a certified physician for clinical decisions.
+    </p>
+</div>
+{% endblock %}

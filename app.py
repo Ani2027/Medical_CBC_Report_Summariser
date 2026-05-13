@@ -31,8 +31,8 @@ input_dict = {
 # ----------------------------------------
 print("🔍 CBC Interpretation Based on Status:")
 cbc_explanations = analyze_parameters(input_dict)
-for line in cbc_explanations:
-    print("📌", line)
+for item in cbc_explanations:
+    print(f"📌 {item['param']} = {item['status']} → {item['message']}")
 
 print("\n🤖 Predicting Most Likely Conditions...\n")
 
