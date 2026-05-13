@@ -1,96 +1,118 @@
+# 🩸 AI-Powered Medical CBC Report Summariser & Disease Predictor
 
-# AI-Powered CBC Report Summarizer & Disease Predictor
-
-An intelligent diagnostic system that interprets CBC test results and user symptoms to identify possible conditions, explain abnormal test parameters, recommend diets, and suggest follow-up tests — in plain, understandable language.
-
----
-
-## Features
-
-- CBC parameter explanation (rule-based)  
-- ML-based disease prediction (LightGBM classifier)  
-- Hybrid diagnosis: rule + model  
-- Diet & 🧪 test recommendations per condition  
-- Patient-friendly explanations  
+An intelligent diagnostic system that interprets Complete Blood Count (CBC) test results from uploaded PDF reports, combines them with user-input symptoms, and uses Machine Learning to identify possible conditions. The system explains abnormal test parameters, recommends diets, and suggests follow-up tests in plain, patient-friendly language.
 
 ---
 
-## How It Works
+## ✨ Features
 
-1. **Input:**
-   - CBC test statuses (Low, Normal, High)
-   - Symptoms (Fatigue, Fever, etc.)
-
-2. **Step 1: Rule-based CBC Analysis**  
-   Each parameter interpreted based on clinical rules
-
-3. **Step 2: Disease Prediction (ML Model)**  
-   Predicts top 3 possible diseases using trained LightGBM classifier
-
-4. **Step 3: Advice & Recommendations**  
-   For each predicted condition, provides:  
-   - Medical advice  
-   - Diet suggestions  
-   - Follow-up test list  
+- **Automated PDF Parsing**: Upload your CBC report (PDF), and the system automatically extracts lab values.
+- **Rule-based CBC Parameter Explanation**: Clinically-aligned rules interpret each parameter (e.g., Low, Normal, High) and explain what it means.
+- **ML-based Disease Prediction**: A trained LightGBM classifier predicts the top possible diseases based on both CBC parameters and symptoms.
+- **Actionable Recommendations**: Provides tailored medical advice, dietary suggestions, and follow-up tests for predicted conditions.
+- **Dual Interface**: Offers a user-friendly Django web application and a CLI script for quick testing.
 
 ---
 
-## Project Structure
- 
-![image](https://github.com/user-attachments/assets/807d7c66-64bf-47d2-bffa-e8df7cc08362)
+## 🛠️ Technology Stack
+
+- **Backend / Web Framework**: Django, Python
+- **Machine Learning**: LightGBM, Scikit-learn, Pandas, NumPy
+- **PDF Extraction**: PyMuPDF
+- **Frontend**: HTML/CSS (Django Templates)
 
 ---
 
-## How to Run
+## 📂 Project Structure
 
-Install dependencies:
-
+```text
+Medical_CBC_Report_Summariser/
+├── app.py                      # Command Line Interface (CLI) testing script
+├── manage.py                   # Django management script
+├── bloodpredictor/             # Django core project configuration
+├── predictor/                  # Django web application (views, templates, urls)
+├── data/                       
+│   ├── config/                 # Clinical rules and model configuration JSONs
+│   └── processed/              # Datasets used for training
+├── models/                     # Trained LightGBM model & Encoders
+├── scripts/                    # Utility scripts (synthetic dataset generation, etc.)
+├── utils/                      # Helper modules (PDF parsing, rule-based logic)
+├── requirements.txt            # Python dependencies
+└── README.md                   # Project documentation
 ```
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/Ani2027/Medical_CBC_Report_Summariser.git
+cd Medical_CBC_Report_Summariser
+```
+
+### 2. Create a Virtual Environment
+```bash
+python -m venv .venv
+# On Windows
+.venv\Scripts\activate
+# On Mac/Linux
+source .venv/bin/activate
+```
+
+### 3. Install Dependencies
+```bash
 pip install -r requirements.txt
 ```
 
-Then run:
-
+### 4. Run the Web Application
+```bash
+python manage.py runserver
 ```
+Visit `http://127.0.0.1:8000` in your browser.
+
+---
+
+## 🚀 How to Use
+
+### Web Interface
+1. **Upload Report**: Navigate to the homepage and upload a CBC blood test report (PDF).
+2. **Add Symptoms**: After extraction, check the boxes for any symptoms you are currently experiencing (e.g., Fever, Fatigue, Nausea).
+3. **View Diagnosis**: Click Predict to get a plain-English summary of your CBC results, the top predicted conditions, diet recommendations, and follow-up tests.
+
+### Command Line Interface (CLI)
+You can test the core logic without starting the server by running the CLI script:
+```bash
 python app.py
 ```
+*Note: You can modify the `input_dict` inside `app.py` to test different CBC values and symptoms manually.*
 
 ---
 
-## Sample Output
+## 🧠 How It Works (Under the Hood)
 
-**CBC Interpretation Based on Status:**
-
-    - HGB_status = Low → Low hemoglobin - could indicate anemia or nutritional deficiency.  
-    - WBC_status = Low → Low WBC - may suggest viral infection.  
-
-**Predicting Most Likely Conditions...**  
-
-    - Condition: Iron Deficiency (Anemia) - 78.61%  
-    - Advice: Low hemoglobin and RBC levels may indicate iron deficiency.  
-    - Diet: Add spinach, legumes, eggs, fortified cereals to your diet.  
-    - Follow-Up Tests: Serum Ferritin, Serum Iron, TIBC 
-     
- 
+1. **PDF Processing**: `utils/pdf_parser.py` uses PyMuPDF to extract text from the lab report, identifying key CBC parameters (HGB, RBC, WBC, etc.) and classifying their statuses (Low, Normal, High).
+2. **Rule-Based Interpretation**: `utils/analyze_parameters.py` checks these statuses against `data/config/cbc_interpretation_rules.json` to generate human-readable explanations.
+3. **ML Prediction Pipeline**: `models/predictor.py` takes the combined CBC statuses and boolean symptoms (0 or 1), passes them through the trained LightGBM model, and returns the top 3 most likely diseases along with medical advice and diet suggestions.
 
 ---
 
-## 🗂️ Dataset
+## 🗂️ Dataset Coverage
 
-Covers 15+ conditions:  
+The model is trained to recognize 15+ conditions including:  
 - Anemia, Dengue, Malaria, Typhoid  
 - Viral/Bacterial infections, Sepsis, Pancytopenia  
-- Immunity issues, Nutrition deficiency, and more  
+- Immunity issues, Nutritional deficiencies, and more  
 
 ---
 
 ## ⚠️ Disclaimer
 
-This tool is **not a diagnostic device**. It is intended for **educational and preliminary support** only. Always consult a certified physician for clinical decisions.
+This tool is **not a diagnostic device**. It is intended for **educational and preliminary support** only. Always consult a certified physician or healthcare professional for clinical decisions and accurate diagnosis.
 
 ---
 
 ## 👨‍💻 Developed By
 
 Built by **Aniket** and **Harshit**  
-Inspired by real-world healthcare needs and diagnostic workflows
+*Inspired by real-world healthcare needs and diagnostic workflows.*
